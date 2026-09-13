@@ -18,8 +18,8 @@ class CharacterListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final village = character.affiliation!.isNotEmpty
-        ? character.affiliation!.first
+    final village = character.affiliation.isNotEmpty
+        ? character.affiliation.first
         : '—';
 
     return ListTile(

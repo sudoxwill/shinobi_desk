@@ -22,8 +22,8 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final character = widget.character;
-    final village = character.affiliation!.isNotEmpty
-        ? character.affiliation!.first
+    final village = character.affiliation.isNotEmpty
+        ? character.affiliation.first
         : '—';
 
     return Scaffold(
@@ -124,7 +124,7 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
                     label: 'Clan',
                     value: character.clan ?? '—',
                   ),
-                  if (character.natureType!.isNotEmpty) ...[
+                  if (character.natureType.isNotEmpty) ...[
                     const SizedBox(height: 16),
                     const Text('Nature de chakra', style: AppTextStyles.h3),
                     const SizedBox(height: 10),
@@ -132,13 +132,13 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        for (final natureType in character.natureType!)
+                        for (final natureType in character.natureType)
                           _Tag(natureType),
                       ],
                     ),
                   ],
                   const SizedBox(height: 28),
-                  if (character.jutsu!.isNotEmpty) ...[
+                  if (character.jutsu.isNotEmpty) ...[
                     const SizedBox(height: 16),
                     const Text('Jutsu', style: AppTextStyles.h3),
                     const SizedBox(height: 10),
@@ -146,7 +146,7 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        for (final jutsu in character.jutsu!) _Tag(jutsu),
+                        for (final jutsu in character.jutsu) _Tag(jutsu),
                       ],
                     ),
                   ],

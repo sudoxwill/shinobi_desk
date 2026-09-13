@@ -73,50 +73,48 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             ),
             const SizedBox(height: 8),
             Expanded(
-              child: searchProviderAsync.value == null
-                  ? const Center(
-                      child: Text(
-                        'Tape un nom pour commencer ta recherche.',
-                        style: AppTextStyles.bodySecondary,
-                      ),
-                    )
-                  : searchProviderAsync.when(
-                      data: (List<Character>? data) {
-                        return data!.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  'Aucun personnage trouvé.',
-                                  style: AppTextStyles.bodySecondary,
-                                ),
-                              )
-                            : ListView.separated(
-                                itemCount: data.length,
-                                separatorBuilder: (_, _) =>
-                                    const Divider(height: 1),
-                                itemBuilder: (context, index) {
-                                  final character = data[index];
-                                  return CharacterListTile(
+              child: searchProviderAsync.when(
+                data: (List<Character>? data) {
+                  return data == null
+                      ? const Center(
+                          child: Text(
+                            'Tape un nom pour commencer ta recherche.',
+                            style: AppTextStyles.bodySecondary,
+                          ),
+                        )
+                      : data.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'Aucun personnage trouvé.',
+                            style: AppTextStyles.bodySecondary,
+                          ),
+                        )
+                      : ListView.separated(
+                          itemCount: data.length,
+                          separatorBuilder: (_, _) => const Divider(height: 1),
+                          itemBuilder: (context, index) {
+                            final character = data[index];
+                            return CharacterListTile(
+                              character: character,
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => CharacterDetailScreen(
                                     character: character,
-                                    onTap: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => CharacterDetailScreen(
-                                          character: character,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                      },
-                      error: (Object error, StackTrace stackTrace) => Center(
-                        child: Text(
-                          error.toString(),
-                          style: AppTextStyles.bodySecondary,
-                        ),
-                      ),
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                },
+                error: (Object error, StackTrace stackTrace) => Center(
+                  child: Text(
+                    error.toString(),
+                    style: AppTextStyles.bodySecondary,
+                  ),
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+              ),
             ),
           ],
         ),

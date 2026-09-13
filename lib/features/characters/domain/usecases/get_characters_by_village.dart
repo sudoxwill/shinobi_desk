@@ -13,7 +13,7 @@ class GetCharactersByVillage
   Future<List<Character>> call(GetAllCharactersParam param) {
     return characterRepository.getAllCharacters(
       page: param.page,
-      limit: param.page,
+      limit: param.limit,
     );
   }
 }

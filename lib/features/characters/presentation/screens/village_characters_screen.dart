@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shinobi_desk/core/screens/network_error_screen.dart';
 import 'package:shinobi_desk/core/theme/app_text_styles.dart';
 import 'package:shinobi_desk/core/widgets/character_list_tile.dart';
 import 'package:shinobi_desk/core/widgets/village_data.dart';
-import 'package:shinobi_desk/features/characters/domain/entities/character.dart';
 import 'package:shinobi_desk/features/characters/presentation/providers/characters_by_village_provider.dart';
 import 'package:shinobi_desk/features/characters/presentation/screens/character_detail_screen.dart';
 
@@ -21,42 +19,16 @@ class VillageCharactersScreen extends ConsumerStatefulWidget {
 class _VillageCharactersScreenState
     extends ConsumerState<VillageCharactersScreen> {
   @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref
-          .read(charactersByVillageProvider.notifier)
-          .getCharactersByVillage(widget.village.label);
-    });
-
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    ref.invalidate(charactersByVillageProvider);
+    ref.invalidate(charactersByVillageProvider(widget.village.label));
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final charactersByVillageAsync = ref.watch(charactersByVillageProvider);
-    ref.listen<AsyncValue<List<Character>>>(charactersByVillageProvider, (
-      previous,
-      next,
-    ) {
-      if (next.hasError && !next.isLoading) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => NetworkErrorScreen(
-              onRetry: () {
-                Navigator.of(context).pop();
-                ref.invalidate(charactersByVillageProvider);
-              },
-            ),
-          ),
-        );
-      }
-    });
+    final charactersByVillageAsync = ref.watch(
+      charactersByVillageProvider(widget.village.label),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -66,6 +38,13 @@ class _VillageCharactersScreenState
       ),
       body: charactersByVillageAsync.isLoading
           ? Center(child: CircularProgressIndicator())
+          : charactersByVillageAsync.value == null
+          ? Center(
+              child: Text(
+                'Aucun personnage trouvé pour ${widget.village.label}.',
+                style: AppTextStyles.bodySecondary,
+              ),
+            )
           : charactersByVillageAsync.value!.isEmpty
           ? Center(
               child: Text(
@@ -73,10 +52,9 @@ class _VillageCharactersScreenState
                 style: AppTextStyles.bodySecondary,
               ),
             )
-          : ListView.separated(
+          : ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               itemCount: charactersByVillageAsync.value!.length,
-              separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (context, index) {
                 final character = charactersByVillageAsync.value![index];
                 return CharacterListTile(
