@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shinobi_desk/core/constant/api_constants.dart';
-import 'package:shinobi_desk/core/screens/network_error_screen.dart';
 import 'package:shinobi_desk/core/theme/app_text_styles.dart';
 import 'package:shinobi_desk/core/widgets/app_bottom_nav_bar.dart';
 import 'package:shinobi_desk/core/widgets/app_text_field.dart';
@@ -64,7 +63,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               hint: 'Rechercher un personnage...',
               controller: _controller,
               icon: Icons.search_rounded,
-              onChanged: (value) => ref
+              onSubmitted: (value) => ref
                   .read(searchProvider.notifier)
                   .searchCharacters(
                     query: value,
@@ -91,8 +90,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                                 ),
                               )
                             : ListView.separated(
-                                itemCount: data!.length,
-                                separatorBuilder: (_, __) =>
+                                itemCount: data.length,
+                                separatorBuilder: (_, _) =>
                                     const Divider(height: 1),
                                 itemBuilder: (context, index) {
                                   final character = data[index];

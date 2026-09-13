@@ -33,7 +33,7 @@ class AppColors {
   static const Color kiri = Color(0xFFAEE0F0);
   static const Color kumo = Color(0xFFF4D35E);
   static const Color iwa = Color(0xFF9C9284);
-  static const Color akatsuki = Color(0xFFB23A2E);
+  static const Color ame = Color(0xFF34495E);
 
   static const Color divider = Color(0xFFE7E2D9);
 }

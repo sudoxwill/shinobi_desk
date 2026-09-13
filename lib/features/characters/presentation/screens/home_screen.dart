@@ -209,8 +209,8 @@ class HomeScreen extends ConsumerWidget {
                                   ),
                                 ),
                                 Text(
-                                  character.affiliation.isNotEmpty
-                                      ? character.affiliation.first
+                                  character.affiliation!.isNotEmpty
+                                      ? character.affiliation!.first
                                       : '—',
                                   style: AppTextStyles.caption,
                                 ),

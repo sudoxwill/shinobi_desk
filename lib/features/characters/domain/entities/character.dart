@@ -7,22 +7,22 @@ class Character extends Equatable {
   final String? sex;
   final String? clan;
   final List<String> images;
-  final List<String> affiliation;
-  final List<String> jutsu;
-  final List<String> natureType;
-  final Map<String, String> family;
+  final List<String>? affiliation;
+  final List<String>? jutsu;
+  final List<String>? natureType;
+  final Map<String, String>? family;
 
   const Character({
     required this.id,
     required this.name,
     required this.images,
-    required this.jutsu,
-    required this.natureType,
-    required this.family,
+    this.jutsu,
+    this.natureType,
+    this.family,
     this.birthdate,
     this.sex,
     this.clan,
-    required this.affiliation,
+    this.affiliation,
   });
 
   @override

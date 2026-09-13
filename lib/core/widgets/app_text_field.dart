@@ -9,7 +9,7 @@ class AppTextField extends StatefulWidget {
     this.icon,
     this.obscureToggle = false,
     this.keyboardType,
-    this.onChanged,
+    this.onSubmitted,
     this.filled = true,
   });
 
@@ -18,7 +18,7 @@ class AppTextField extends StatefulWidget {
   final IconData? icon;
   final bool obscureToggle;
   final TextInputType? keyboardType;
-  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
 
   /// true = fond rempli (écrans clairs), false = pensé pour fond sombre.
   final bool filled;
@@ -43,7 +43,7 @@ class _AppTextFieldState extends State<AppTextField> {
       controller: widget.controller,
       obscureText: widget.obscureToggle && _obscured,
       keyboardType: widget.keyboardType,
-      onChanged: widget.onChanged,
+      onSubmitted: widget.onSubmitted,
       style: TextStyle(color: textColor),
       decoration: InputDecoration(
         hintText: widget.hint,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shinobi_desk/core/theme/app_colors.dart';
 import 'package:shinobi_desk/core/widgets/app_text_field.dart';
 import 'package:shinobi_desk/core/widgets/primary_button.dart';
-import 'package:shinobi_desk/features/auth/presentation/screens/register_page.dart';
+import 'package:shinobi_desk/features/auth/presentation/screens/register_screen.dart';
 import 'package:shinobi_desk/features/characters/presentation/screens/home_screen.dart';
 
 /// Écran de connexion

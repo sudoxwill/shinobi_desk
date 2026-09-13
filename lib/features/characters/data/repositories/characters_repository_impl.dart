@@ -22,6 +22,7 @@ class CharactersRepositoryImpl implements CharacterRepository {
     } on CustomException catch (e) {
       throw mapExceptionToFailure(e);
     } catch (e) {
+      print('_____________ $e __________');
       throw UnexpectedFailure();
     }
   }
@@ -49,17 +50,6 @@ class CharactersRepositoryImpl implements CharacterRepository {
         page: page,
         limit: limit,
       );
-    } on CustomException catch (e) {
-      throw mapExceptionToFailure(e);
-    } catch (e) {
-      throw UnexpectedFailure();
-    }
-  }
-
-  @override
-  Future<List<Character>> getCharactersByIVillage(String village) async {
-    try {
-      return await charactersRemoteDataSource.getCharactersByIVillage(village);
     } on CustomException catch (e) {
       throw mapExceptionToFailure(e);
     } catch (e) {

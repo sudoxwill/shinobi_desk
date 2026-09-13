@@ -34,10 +34,6 @@ class VillageData {
       color: AppColors.iwa,
       icon: Icons.terrain_rounded,
     ),
-    VillageData(
-      label: 'Akatsuki',
-      color: AppColors.akatsuki,
-      icon: Icons.cloud_rounded,
-    ),
+    VillageData(label: 'Ame', color: AppColors.ame, icon: Icons.umbrella),
   ];
 }

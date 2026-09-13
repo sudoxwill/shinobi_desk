@@ -64,9 +64,9 @@ class CharacterModel extends Character {
   };
 }
 
-String _resolveStringOrListIssue(String label, Map<String, dynamic> personal) {
+String? _resolveStringOrListIssue(String label, Map<String, dynamic> personal) {
   return personal[label] == null
-      ? ''
+      ? null
       : personal[label].runtimeType == String
       ? personal[label]
       : personal[label].first;
