@@ -55,4 +55,15 @@ class CharactersRepositoryImpl implements CharacterRepository {
       throw UnexpectedFailure();
     }
   }
+
+  @override
+  Future<List<Character>> getCharactersByIVillage(String village) async {
+    try {
+      return await charactersRemoteDataSource.getCharactersByIVillage(village);
+    } on CustomException catch (e) {
+      throw mapExceptionToFailure(e);
+    } catch (e) {
+      throw UnexpectedFailure();
+    }
+  }
 }

@@ -3,33 +3,26 @@ import 'package:shinobi_desk/core/mock/mock_characters.dart';
 import 'package:shinobi_desk/core/theme/app_text_styles.dart';
 import 'package:shinobi_desk/core/widgets/app_bottom_nav_bar.dart';
 import 'package:shinobi_desk/core/widgets/character_list_tile.dart';
-import 'package:shinobi_desk/features/characters/presentation/screens/character_detail_page.dart';
-import 'package:shinobi_desk/features/characters/presentation/screens/home_page.dart';
-import 'package:shinobi_desk/features/characters/presentation/screens/search_page.dart';
-import 'package:shinobi_desk/features/profile/presentation/pages/profile_page.dart';
+import 'package:shinobi_desk/features/characters/presentation/screens/character_detail_screen.dart';
+import 'package:shinobi_desk/features/characters/presentation/screens/home_screen.dart';
+import 'package:shinobi_desk/features/characters/presentation/screens/search_screen.dart';
+import 'package:shinobi_desk/features/profile/presentation/screens/profile_screen.dart';
 
-/// Onglet "Favoris".
-///
-/// Statique pour l'instant : affiche `mockCharacters` avec un cœur plein.
-/// Rappel du plan posé plus tôt dans le projet — les favoris seront
-/// synchronisés via une table Supabase (pas seulement du cache local), donc
-/// cet écran finira branché sur un futur `favoritesProvider` qui appelle
-/// Supabase, pas sur `charactersProvider`.
-class FavoritesPage extends StatelessWidget {
-  const FavoritesPage({super.key});
+class FavoritesScreen extends StatelessWidget {
+  const FavoritesScreen({super.key});
 
   void _goToTab(BuildContext context, int index) {
     if (index == 2) return;
     late final Widget page;
     switch (index) {
       case 0:
-        page = const HomePage();
+        page = const HomeScreen();
         break;
       case 1:
-        page = const SearchPage();
+        page = const SearchScreen();
         break;
       default:
-        page = const ProfilePage();
+        page = const ProfileScreen();
     }
     Navigator.of(
       context,
@@ -61,7 +54,7 @@ class FavoritesPage extends StatelessWidget {
             ),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => CharacterDetailPage(character: character),
+                builder: (_) => CharacterDetailScreen(character: character),
               ),
             ),
           );

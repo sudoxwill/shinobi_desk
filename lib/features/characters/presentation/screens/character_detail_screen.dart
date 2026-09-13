@@ -6,24 +6,17 @@ import 'package:shinobi_desk/core/widgets/info_row.dart';
 import 'package:shinobi_desk/core/widgets/primary_button.dart';
 import 'package:shinobi_desk/features/characters/domain/entities/character.dart';
 
-/// Fiche détaillée d'un personnage.
-///
-/// Reçoit directement un `Character` (l'entité de domaine, pas un modèle
-/// mock à part) : c'est volontaire, pour que tu puisses brancher cet écran
-/// plus tard simplement en lui passant `ref.watch(characterProvider).value`
-/// au lieu d'un personnage venu de `mockCharacters`. Le bouton "Ajouter aux
-/// favoris" ne fait pour l'instant que basculer un état local (pas encore
-/// de synchronisation Supabase).
-class CharacterDetailPage extends StatefulWidget {
-  const CharacterDetailPage({super.key, required this.character});
+/// Fiche détaillée d'un personnage
+class CharacterDetailScreen extends StatefulWidget {
+  const CharacterDetailScreen({super.key, required this.character});
 
   final Character character;
 
   @override
-  State<CharacterDetailPage> createState() => _CharacterDetailPageState();
+  State<CharacterDetailScreen> createState() => _CharacterDetailScreenState();
 }
 
-class _CharacterDetailPageState extends State<CharacterDetailPage> {
+class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
   bool _isFavorite = false;
 
   @override
@@ -114,13 +107,13 @@ class _CharacterDetailPageState extends State<CharacterDetailPage> {
                     label: 'Village',
                     value: village,
                   ),
-                  InfoRow(
-                    icon: Icons.bolt_outlined,
-                    label: 'Nature de chakra',
-                    value: character.natureType!.isNotEmpty
-                        ? character.natureType!.join(', ')
-                        : '—',
-                  ),
+                  // InfoRow(
+                  //   icon: Icons.bolt_outlined,
+                  //   label: 'Nature de chakra',
+                  //   value: character.natureType!.isNotEmpty
+                  //       ? character.natureType!.join(', ')
+                  //       : '—',
+                  // ),
                   InfoRow(
                     icon: Icons.cake_outlined,
                     label: 'Anniversaire',
@@ -131,6 +124,20 @@ class _CharacterDetailPageState extends State<CharacterDetailPage> {
                     label: 'Clan',
                     value: character.clan ?? '—',
                   ),
+                  if (character.natureType!.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    const Text('Nature de chakra', style: AppTextStyles.h3),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final natureType in character.natureType!)
+                          _Tag(natureType),
+                      ],
+                    ),
+                  ],
+                  const SizedBox(height: 28),
                   if (character.jutsu!.isNotEmpty) ...[
                     const SizedBox(height: 16),
                     const Text('Jutsu', style: AppTextStyles.h3),
@@ -143,6 +150,7 @@ class _CharacterDetailPageState extends State<CharacterDetailPage> {
                       ],
                     ),
                   ],
+
                   const SizedBox(height: 28),
                   PrimaryButton(
                     label: _isFavorite

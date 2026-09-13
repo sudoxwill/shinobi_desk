@@ -18,10 +18,13 @@ class CharacterAvatar extends StatelessWidget {
     final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
 
     if (imageUrl != null && imageUrl!.isNotEmpty) {
-      return CircleAvatar(
-        radius: radius,
-        backgroundColor: AppColors.surfaceAlt,
-        backgroundImage: NetworkImage(imageUrl!),
+      return Hero(
+        tag: imageUrl!,
+        child: CircleAvatar(
+          radius: radius,
+          backgroundColor: AppColors.surfaceAlt,
+          backgroundImage: NetworkImage(imageUrl!),
+        ),
       );
     }
 

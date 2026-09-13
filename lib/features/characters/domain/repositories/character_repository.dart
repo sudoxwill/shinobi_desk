@@ -11,4 +11,6 @@ abstract class CharacterRepository {
     required int limit,
   });
   Future<Character> getCharacterById(int id);
+
+  Future<List<Character>> getCharactersByIVillage(String village);
 }

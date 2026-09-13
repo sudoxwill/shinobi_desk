@@ -3,29 +3,29 @@ import 'package:shinobi_desk/core/theme/app_colors.dart';
 import 'package:shinobi_desk/core/theme/app_text_styles.dart';
 import 'package:shinobi_desk/core/widgets/app_bottom_nav_bar.dart';
 import 'package:shinobi_desk/core/widgets/character_avatar.dart';
-import 'package:shinobi_desk/features/auth/presentation/pages/login_page.dart';
-import 'package:shinobi_desk/features/characters/presentation/screens/home_page.dart';
-import 'package:shinobi_desk/features/characters/presentation/screens/search_page.dart';
-import 'package:shinobi_desk/features/favorite/presentation/pages/favorites_page.dart';
-import 'package:shinobi_desk/features/profile/presentation/pages/settings_page.dart';
+import 'package:shinobi_desk/features/auth/presentation/screens/login_screen.dart';
+import 'package:shinobi_desk/features/characters/presentation/screens/home_screen.dart';
+import 'package:shinobi_desk/features/characters/presentation/screens/search_screen.dart';
+import 'package:shinobi_desk/features/favorite/presentation/screens/favorites_screen.dart';
+import 'package:shinobi_desk/features/profile/presentation/screens/settings_screen.dart';
 
 /// Onglet "Profil". Le nom/email affichés sont en dur ; à remplacer par les
 /// infos du user Supabase une fois l'auth branchée.
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   void _goToTab(BuildContext context, int index) {
     if (index == 3) return;
     late final Widget page;
     switch (index) {
       case 0:
-        page = const HomePage();
+        page = const HomeScreen();
         break;
       case 1:
-        page = const SearchPage();
+        page = const SearchScreen();
         break;
       default:
-        page = const FavoritesPage();
+        page = const FavoritesScreen();
     }
     Navigator.of(
       context,
@@ -63,7 +63,7 @@ class ProfilePage extends StatelessWidget {
             label: 'Mes favoris',
             onTap: () => Navigator.of(
               context,
-            ).push(MaterialPageRoute(builder: (_) => const FavoritesPage())),
+            ).push(MaterialPageRoute(builder: (_) => const FavoritesScreen())),
           ),
           _ProfileTile(
             icon: Icons.settings_outlined,
@@ -84,7 +84,7 @@ class ProfilePage extends StatelessWidget {
             label: 'Se déconnecter',
             color: AppColors.error,
             onTap: () => Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => const LoginPage()),
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
               (route) => false,
             ),
           ),

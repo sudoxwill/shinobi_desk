@@ -13,6 +13,7 @@ abstract class CharactersRemoteDataSource {
     required int limit,
   });
   Future<CharacterModel> getCharacterById(int id);
+  Future<List<CharacterModel>> getCharactersByIVillage(String village);
 }
 
 class CharactersRemoteDataSourceImpl implements CharactersRemoteDataSource {
@@ -30,9 +31,10 @@ class CharactersRemoteDataSourceImpl implements CharactersRemoteDataSource {
         '/characters',
         queryParameters: {'page': page, 'limit': limit},
       );
-      return (response.data as List<dynamic>)
+      final data = (response.data['characters'] as List<dynamic>)
           .map((e) => CharacterModel.fromJson(e))
           .toList();
+      return data;
     } on DioException catch (e) {
       throw mapDioException(e);
     }
@@ -58,6 +60,27 @@ class CharactersRemoteDataSourceImpl implements CharactersRemoteDataSource {
       final response = await dio.get(
         '/characters',
         queryParameters: {'name': query, 'page': page, 'limit': limit},
+      );
+      return (response.data['characters'] as List<dynamic>)
+          .map((e) => CharacterModel.fromJson(e))
+          .toList();
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  @override
+  Future<List<CharacterModel>> getCharactersByIVillage(String village) async {
+    try {
+      Response response = await dio.get(
+        '/villages',
+        queryParameters: {'name': village},
+      );
+
+      final villageData = response.data['villages'] as List<dynamic>;
+
+      response = await dio.get(
+        '/characters/${villageData.first['characters'].join(',')}',
       );
       return (response.data as List<dynamic>)
           .map((e) => CharacterModel.fromJson(e))

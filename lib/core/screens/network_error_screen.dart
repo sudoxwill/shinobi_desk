@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:shinobi_desk/core/theme/app_colors.dart';
 import 'package:shinobi_desk/core/widgets/primary_button.dart';
 
-class OfflinePage extends StatelessWidget {
-  const OfflinePage({super.key, this.onRetry});
+class NetworkErrorScreen extends StatelessWidget {
+  const NetworkErrorScreen({
+    super.key,
+    this.message =
+        'Impossible de se connecter au serveur. Vérifiez votre '
+        'connexion Internet et réessayez.',
+    this.onRetry,
+  });
 
+  final String message;
   final VoidCallback? onRetry;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.dark,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -19,41 +25,39 @@ class OfflinePage extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.06),
+                decoration: const BoxDecoration(
+                  color: AppColors.errorBackground,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
-                  Icons.wifi_off_rounded,
-                  color: Colors.white70,
+                  Icons.error_outline_rounded,
+                  color: AppColors.error,
                   size: 40,
                 ),
               ),
               const SizedBox(height: 24),
               const Text(
-                'Mode hors-ligne',
+                'Erreur de réseau',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Vous consultez les données en cache. Certaines informations '
-                'peuvent être obsolètes.',
+                message,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
-                  color: Colors.white.withOpacity(0.6),
+                  color: AppColors.textSecondary,
                   height: 1.4,
                 ),
               ),
               const SizedBox(height: 32),
-              SecondaryButton(
+              PrimaryButton(
                 label: 'Réessayer',
                 icon: Icons.refresh_rounded,
-                light: true,
                 onPressed: onRetry ?? () {},
               ),
             ],

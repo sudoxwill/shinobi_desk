@@ -2,28 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:shinobi_desk/core/theme/app_colors.dart';
 import 'package:shinobi_desk/core/widgets/app_text_field.dart';
 import 'package:shinobi_desk/core/widgets/primary_button.dart';
-import 'package:shinobi_desk/features/auth/presentation/pages/register_page.dart';
-import 'package:shinobi_desk/features/characters/presentation/screens/home_page.dart';
 
-/// Écran de connexion. Purement visuel pour l'instant : les champs ne sont
-/// reliés à aucune logique d'authentification, et "Se connecter" navigue
-/// directement vers l'accueil. À brancher plus tard sur le futur
-/// AuthNotifier (Supabase Auth).
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+/// Écran de création de compte
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -31,21 +30,19 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.dark,
+      appBar: AppBar(
+        backgroundColor: AppColors.dark,
+        foregroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 24),
-              Icon(
-                Icons.filter_vintage_rounded,
-                color: AppColors.primary,
-                size: 32,
-              ),
-              const SizedBox(height: 32),
               const Text(
-                'Bon retour ! 👋',
+                'Créer un compte',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -54,13 +51,20 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 6),
               Text(
-                'Connecte-toi pour continuer',
+                'Rejoins la communauté des shinobi !',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.white.withOpacity(0.6),
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 28),
+              AppTextField(
+                hint: "Nom d'utilisateur",
+                controller: _usernameController,
+                icon: Icons.person_outline_rounded,
+                filled: false,
+              ),
+              const SizedBox(height: 16),
               AppTextField(
                 hint: 'Email',
                 controller: _emailController,
@@ -76,34 +80,33 @@ class _LoginPageState extends State<LoginPage> {
                 obscureToggle: true,
                 filled: false,
               ),
+              const SizedBox(height: 16),
+              AppTextField(
+                hint: 'Confirmer le mot de passe',
+                controller: _confirmPasswordController,
+                icon: Icons.lock_outline_rounded,
+                obscureToggle: true,
+                filled: false,
+              ),
               const SizedBox(height: 28),
               PrimaryButton(
-                label: 'Se connecter',
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (_) => const HomePage()),
-                    (route) => false,
-                  );
-                },
+                label: "S'inscrire",
+                onPressed: () => Navigator.of(context).pop(),
               ),
               const SizedBox(height: 20),
               Center(
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const RegisterPage()),
-                    );
-                  },
+                  onTap: () => Navigator.of(context).pop(),
                   child: Text.rich(
                     TextSpan(
-                      text: "Pas encore de compte ? ",
+                      text: 'Déjà un compte ? ',
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.6),
                         fontSize: 13,
                       ),
                       children: const [
                         TextSpan(
-                          text: "S'inscrire",
+                          text: 'Se connecter',
                           style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,

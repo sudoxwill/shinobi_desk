@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shinobi_desk/core/constant/assets_constants.dart';
 import 'package:shinobi_desk/core/widgets/primary_button.dart';
-import 'package:shinobi_desk/features/auth/presentation/pages/login_page.dart';
+import 'package:shinobi_desk/features/auth/presentation/screens/login_screen.dart';
 
-class SplashPage extends StatelessWidget {
-  const SplashPage({super.key});
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,11 @@ class SplashPage extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(AssetsConstants.spashBackgroundImage),
+            fit: BoxFit.cover,
+          ),
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -23,11 +28,11 @@ class SplashPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             child: Column(
               children: [
-                const Spacer(flex: 3),
-                Icon(
-                  Icons.filter_vintage_rounded,
-                  size: 56,
-                  color: Colors.white.withOpacity(0.9),
+                const Spacer(flex: 1),
+                Image.asset(
+                  AssetsConstants.logo,
+                  width: 100,
+                  color: Colors.white,
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -51,7 +56,7 @@ class SplashPage extends StatelessWidget {
                   label: 'Commencer',
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const LoginPage()),
+                      MaterialPageRoute(builder: (_) => const LoginScreen()),
                     );
                   },
                 ),
