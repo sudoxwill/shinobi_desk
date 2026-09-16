@@ -52,6 +52,7 @@ class CharactersRepositoryImpl implements CharacterRepository {
     } on CustomException catch (e) {
       throw mapExceptionToFailure(e);
     } catch (e) {
+      print(e);
       throw UnexpectedFailure();
     }
   }

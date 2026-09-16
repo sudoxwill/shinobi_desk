@@ -15,7 +15,12 @@ class CharacterModel extends Character {
   });
 
   factory CharacterModel.fromJson(Map<String, dynamic> json) {
-    final personal = json['personal'] as Map<String, dynamic>? ?? {};
+    late dynamic personal;
+    if (json['personal'].runtimeType == List<dynamic>) {
+      personal = <String, dynamic>{};
+    } else {
+      personal = json['personal'] as Map<String, dynamic>? ?? {};
+    }
 
     return CharacterModel(
       id: json['id'],
