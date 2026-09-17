@@ -9,6 +9,7 @@ import 'package:shinobi_desk/core/widgets/featured_character_card.dart';
 import 'package:shinobi_desk/core/widgets/section_header.dart';
 import 'package:shinobi_desk/core/widgets/village_category_card.dart';
 import 'package:shinobi_desk/core/widgets/village_data.dart';
+import 'package:shinobi_desk/features/auth/presentation/providers/auth_provider.dart';
 import 'package:shinobi_desk/features/characters/domain/entities/character.dart';
 import 'package:shinobi_desk/features/characters/presentation/providers/character_provider.dart';
 import 'package:shinobi_desk/features/characters/presentation/providers/characters_provider.dart';
@@ -52,8 +53,9 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final popularCharactersAsync = ref.watch(charactersProvider);
     final featuredCharactersAsync = ref.watch(characterProvider);
+    final userProvider = ref.watch(authProvider);
 
-    ref.listen<AsyncValue<Character>>(characterProvider, (previous, next) {
+    ref.listen<AsyncValue<Character?>>(characterProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -98,7 +100,10 @@ class HomeScreen extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 12),
             child: GestureDetector(
               onTap: () => _goToTab(context, 3),
-              child: const CharacterAvatar(name: 'Will', radius: 16),
+              child: CharacterAvatar(
+                name: userProvider.value!.email.split('@').first.toUpperCase(),
+                radius: 16,
+              ),
             ),
           ),
         ],
@@ -106,6 +111,8 @@ class HomeScreen extends ConsumerWidget {
       body:
           popularCharactersAsync.isLoading || featuredCharactersAsync.isLoading
           ? Center(child: CircularProgressIndicator())
+          : popularCharactersAsync.value == null
+          ? const SizedBox.shrink()
           : SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -140,7 +147,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   FeaturedCharacterCard(
-                    character: featuredCharactersAsync.value!,
+                    character: featuredCharactersAsync.value,
                   ),
                   const SizedBox(height: 24),
                   SectionHeader(title: 'Catégories', onSeeAll: () {}),

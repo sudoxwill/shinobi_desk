@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:shinobi_desk/core/network/dio_client.dart';
+import 'package:shinobi_desk/core/error/exception_mapper.dart';
 import 'package:shinobi_desk/features/characters/data/models/character_model.dart';
 
 abstract class CharactersRemoteDataSource {

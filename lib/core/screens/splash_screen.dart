@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shinobi_desk/core/constant/assets_constants.dart';
 import 'package:shinobi_desk/core/widgets/primary_button.dart';
+import 'package:shinobi_desk/features/auth/presentation/providers/auth_provider.dart';
 import 'package:shinobi_desk/features/auth/presentation/screens/login_screen.dart';
+import 'package:shinobi_desk/features/characters/presentation/screens/home_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends ConsumerWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -55,9 +59,19 @@ class SplashScreen extends StatelessWidget {
                 PrimaryButton(
                   label: 'Commencer',
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                    );
+                    if (authState.hasValue &&
+                        authState.value != null &&
+                        !authState.isLoading) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        (route) => false,
+                      );
+                    } else {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                        (route) => false,
+                      );
+                    }
                   },
                 ),
                 const SizedBox(height: 24),

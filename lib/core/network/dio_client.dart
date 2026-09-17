@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shinobi_desk/core/constant/api_constants.dart';
-import 'package:shinobi_desk/core/error/exception.dart';
 
 Dio createDioClient() {
   return Dio(
@@ -12,18 +12,16 @@ Dio createDioClient() {
   );
 }
 
-CustomException mapDioException(DioException e) {
-  final dioExceptionType = e.type;
-  return switch (dioExceptionType) {
-    DioExceptionType.connectionTimeout => NetworkException(),
-    DioExceptionType.sendTimeout => NetworkException(),
-    DioExceptionType.receiveTimeout => NetworkException(),
-    DioExceptionType.badCertificate => NetworkException(),
-    DioExceptionType.badResponse =>
-      e.response?.statusCode == 404 ? NotFoundException() : ServerException(),
-    DioExceptionType.cancel => ServerException(),
-    DioExceptionType.connectionError => NetworkException(),
-    DioExceptionType.unknown => ServerException(),
-    DioExceptionType.transformTimeout => NetworkException(),
-  };
+Dio createSupabaseDioClient() {
+  return Dio(
+    BaseOptions(
+      baseUrl: dotenv.env['SUPABASE_URL']!,
+      headers: {
+        'apikey': dotenv.env['SUPABASE_KEY']!,
+        'Content-Type': 'application/json',
+      },
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
+    ),
+  );
 }

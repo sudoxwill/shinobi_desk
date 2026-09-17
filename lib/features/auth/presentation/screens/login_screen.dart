@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shinobi_desk/core/error/failure.dart';
 import 'package:shinobi_desk/core/theme/app_colors.dart';
 import 'package:shinobi_desk/core/widgets/app_text_field.dart';
 import 'package:shinobi_desk/core/widgets/primary_button.dart';
+import 'package:shinobi_desk/features/auth/domain/entities/app_user.dart';
+import 'package:shinobi_desk/features/auth/presentation/providers/auth_provider.dart';
 import 'package:shinobi_desk/features/auth/presentation/screens/register_screen.dart';
 import 'package:shinobi_desk/features/characters/presentation/screens/home_screen.dart';
 
 /// Écran de connexion
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -24,8 +28,34 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  String _errorMessage(Object error) {
+    if (error is AuthFailure) {
+      return error.message ?? 'Email ou mot de passe incorrect.';
+    }
+    if (error is NetworkFailure) {
+      return 'Pas de connexion internet.';
+    }
+    return 'Une erreur est survenue, réessaie plus tard.';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+
+    ref.listen<AsyncValue<AppUser?>>(authProvider, (previous, next) {
+      if (next.hasError && !next.isLoading) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(_errorMessage(next.error!))));
+      }
+      if (next.hasValue && next.value != null && !next.isLoading) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          (route) => false,
+        );
+      }
+    });
+
     return Scaffold(
       backgroundColor: AppColors.dark,
       body: SafeArea(
@@ -74,15 +104,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 filled: false,
               ),
               const SizedBox(height: 28),
-              PrimaryButton(
-                label: 'Se connecter',
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (_) => const HomeScreen()),
-                    (route) => false,
-                  );
-                },
-              ),
+              authState.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : PrimaryButton(
+                      label: 'Se connecter',
+                      onPressed: () {
+                        ref
+                            .read(authProvider.notifier)
+                            .login(
+                              _emailController.text.trim(),
+                              _passwordController.text,
+                            );
+                      },
+                    ),
               const SizedBox(height: 20),
               Center(
                 child: GestureDetector(

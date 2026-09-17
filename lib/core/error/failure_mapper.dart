@@ -10,5 +10,6 @@ Failure mapExceptionToFailure(CustomException e) {
     NotFoundException() => NotFoundFailure(),
 
     CacheException() => CacheFailure(),
+    AuthException() => AuthFailure(message: e.message),
   };
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shinobi_desk/core/theme/app_colors.dart';
 import 'package:shinobi_desk/core/theme/app_text_styles.dart';
 import 'package:shinobi_desk/core/widgets/app_bottom_nav_bar.dart';
 import 'package:shinobi_desk/core/widgets/character_avatar.dart';
+import 'package:shinobi_desk/features/auth/domain/entities/app_user.dart';
+import 'package:shinobi_desk/features/auth/presentation/providers/auth_provider.dart';
 import 'package:shinobi_desk/features/auth/presentation/screens/login_screen.dart';
 import 'package:shinobi_desk/features/characters/presentation/screens/home_screen.dart';
 import 'package:shinobi_desk/features/characters/presentation/screens/search_screen.dart';
@@ -11,7 +14,7 @@ import 'package:shinobi_desk/features/profile/presentation/screens/settings_scre
 
 /// Onglet "Profil". Le nom/email affichés sont en dur ; à remplacer par les
 /// infos du user Supabase une fois l'auth branchée.
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   void _goToTab(BuildContext context, int index) {
@@ -33,7 +36,16 @@ class ProfileScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userProvider = ref.watch(authProvider);
+
+    ref.listen<AsyncValue<AppUser?>>(authProvider, (previous, next) {
+      if (!next.hasValue || next.value == null) {
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => LoginScreen()));
+      }
+    });
     return Scaffold(
       appBar: AppBar(title: const Text('Profil', style: AppTextStyles.h3)),
       body: ListView(
@@ -42,14 +54,20 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              const CharacterAvatar(name: 'Will KANA', radius: 32),
+              CharacterAvatar(
+                name: userProvider.value!.email.split('@').first.toUpperCase(),
+                radius: 32,
+              ),
               const SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Will KANA', style: AppTextStyles.h3),
                   Text(
-                    'kanamboma@gmail.com',
+                    userProvider.value!.email.split('@').first.toUpperCase(),
+                    style: AppTextStyles.h3,
+                  ),
+                  Text(
+                    userProvider.value!.email,
                     style: AppTextStyles.bodySecondary,
                   ),
                 ],
@@ -83,10 +101,9 @@ class ProfileScreen extends StatelessWidget {
             icon: Icons.logout_rounded,
             label: 'Se déconnecter',
             color: AppColors.error,
-            onTap: () => Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => const LoginScreen()),
-              (route) => false,
-            ),
+            onTap: () {
+              ref.read(authProvider.notifier).logout();
+            },
           ),
         ],
       ),

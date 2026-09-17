@@ -21,3 +21,8 @@ class CacheFailure extends Failure {
 class UnexpectedFailure extends Failure {
   const UnexpectedFailure();
 }
+
+class AuthFailure extends Failure {
+  final String? message;
+  const AuthFailure({this.message});
+}

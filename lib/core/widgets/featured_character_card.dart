@@ -13,13 +13,13 @@ class FeaturedCharacterCard extends StatelessWidget {
     this.onSeeDetail,
   });
 
-  final Character character;
+  final Character? character;
   final String? tagline;
   final VoidCallback? onSeeDetail;
 
   @override
   Widget build(BuildContext context) {
-    final bool hasImage = character.images.isNotEmpty;
+    final bool hasImage = character != null && character!.images.isNotEmpty;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -31,7 +31,7 @@ class FeaturedCharacterCard extends StatelessWidget {
           children: [
             // Fond : image du personnage si dispo, sinon dégradé de repli.
             if (hasImage)
-              Image.network(character.images.first, fit: BoxFit.cover)
+              Image.network(character!.images.first, fit: BoxFit.cover)
             else
               const DecoratedBox(
                 decoration: BoxDecoration(
@@ -82,7 +82,7 @@ class FeaturedCharacterCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        character.name,
+                        character?.name ?? '',
                         style: AppTextStyles.h2.copyWith(color: Colors.white),
                       ),
                       if (tagline != null) ...[
@@ -96,19 +96,20 @@ class FeaturedCharacterCard extends StatelessWidget {
                         ),
                       ],
                       const SizedBox(height: 14),
-                      _SeeDetailButton(
-                        onTap:
-                            onSeeDetail ??
-                            () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => CharacterDetailScreen(
-                                    character: character,
+                      if (character != null)
+                        _SeeDetailButton(
+                          onTap:
+                              onSeeDetail ??
+                              () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => CharacterDetailScreen(
+                                      character: character!,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                      ),
+                                );
+                              },
+                        ),
                     ],
                   ),
                 ],

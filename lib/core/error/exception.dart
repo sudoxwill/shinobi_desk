@@ -23,3 +23,7 @@ class NotFoundException extends CustomException {
 class CacheException extends CustomException {
   const CacheException({super.message});
 }
+
+class AuthException extends CustomException {
+  const AuthException({super.message});
+}
